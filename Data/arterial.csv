@@ -1,0 +1,18 @@
+Subject,Time to 1st Action,Tourniquet Applied?,Time to Solution,1st Action,Subsequent Action,Chest Exposed,Seal Applied?,Notes
+1 Nursing Grad,1m 15s,No,8m,Eval bleeding,Direct pressure (hand),No,No,
+2 Nursing Undergrad,1m, No,8m,ACE wrap,“Shock Position”,No,No,
+3 Teacher - Trained,4s,Yes,2m 24s,Direct Pressure (knee),Recovery Pos.,No,No,
+4 Teachers - Untrained,2m 50s,No,8m,Respond to uninjured,,No,No,
+5 City - Trained,1m,Yes,2m 55s,TQ @ 1m55s,,No,No,1m 20s to apply TQ
+6 City - Untrained,4m 55s,No,8m,Observed to not be breathing,,No,No,Ignored Completely 
+7 Security - Untrained,30s,Yes,8m,Attempt Improvised TQ,Rescue Pos.,Yes,No,Emptied Traumedix kit-Cut shorts
+8 Security - Trained,45s,Yes,4m 47s,Direct Pressure (hand),TQ,No,No,Found kit at 3m 27s
+9 Students - Trained,30s,Yes,3m 27s,TQ @ 3m27s,,No,No,
+10 Students - Untrained,37s,Yes,8m,Improvised TQ (belt),TQ,Yes,Yes,JROTC kid
+11  EMS baseline,48s,Yes,2m 38s,TQ @ 2m38s,Rescue Pos,Yes,Yes,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,
+,,,,,,,,

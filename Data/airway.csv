@@ -1,0 +1,12 @@
+Subject,Time_to_1st_Action,Time_to_Solution,Time_to_Reassess,1st_Action,Subsequent_Action,Subject_Comments
+Nursing Grad,1m 27s,8m,8m,Jaw Thrust,Bystander instruction,
+Nursing Undergrad,1m 3s,7m 36s,7m 36s,CPR,,
+Teacher - Trained,11s,11s,2m 24s,Rescue Pos.,,
+Teachers - Untrained,1m,8m,8m,Chin lift (unsustained),Head tilt,
+City - Trained,38s,38s,3m 38s,Rescue Pos.,,
+City - Untrained,32s,8m,1m 38s,Head tilt (unsustained),Head lift,
+Security - Trained,18s,18s,2m 42s,Rescue Pos.,,
+Security - Untrained,18s,2m 40s,1m 58s,Open airway,Rescue Pos.,“He’s breathing funny”
+Students - Trained,15s,15s,2m 26s,Rescue Pos.,,
+Students - Untrained,1m 2s,8m,3m 22s,Placed kit under head,,“We have to do something”
+OCFA,25s,1m 21s,1m 21s,Jaw Thrust,Rescue Pos,
