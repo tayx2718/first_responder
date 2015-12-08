@@ -1,0 +1,11 @@
+Participants of the study were obtained as volunteers from the city of Westminster 
+Laypeople include Nursing grads and undergrads, Teachers, city workers, security guards, and students
+Teachers, city workers, security guards and students were randomly placed into 2 groups: trained individuals and untrained individuals
+Medical trained personnel include firefighters, who are pre-trained in disaster scenario in EMS training
+Trained individuals were given a 2-hour TCCC training overview 6 weeks prior to the experiment
+Test participants were pre-screened about their basic knowledge of disaster scenario, with questions including “What is the primary cause of death in population ages 1-44?”, “What do you think is the standard response time when 911 is called?”, and “What is your primary concern immediately following a disaster or emergency situation”. 
+Every group was brought individually into a room with the chief of police, who informed them of the situation: At the mall with friends when a magnitude 7 earthquake strikes. There will be debris on the ground and light will be limited. You are tasked with assessing the situation and responding. 
+The room was situated to simulate a major earthquake with debris and lighting problems with 4 victims: 1 deceased, 1 arterial bleeding, 1 unconscious but breathing, and 1 healthy individual. 
+The participants 1st action times and time to solution were recorded by an observer playing a victim’s friend. 
+They were graded based off prewritten sheets with questions as follows :
+Data was recorded per each individual group and average times of trained, untrained, and professionally trained individuals were compared to both the arterial bleeding and airway stations
