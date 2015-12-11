@@ -7,7 +7,6 @@ pp_deaths_oif_oef = read.csv('./Data/tccc/pp_deaths_oif_oef.csv', header=TRUE)
 ## CFR
 x11()
 plot(x = cfr$war, y = cfr$percent)
-#plot(x = cfr
 
 x11()
 par(mfrow = c(1, 2), mar = c(3, 3, 3, 3))
