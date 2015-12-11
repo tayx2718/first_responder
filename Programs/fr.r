@@ -88,6 +88,13 @@ func.check = function(data, someTitle) {
 }
 
 ## Plots of all times
+level = ('nurse', 'nurse', 'trained', 'untrained', 'trained', 
+         'untrained', 'trained', 'untrained', 'trained', 'untrained', 'fire')
+xyplot(airway$Subject ~ airway$Time_to_1st_Action | level)
+
+
+
+
 a = function(){
 myList = list(timeToFirst, timeToSol, timeToReassess)
 myTitle = list('Time to 1st Action', 'Time to Solution', 'Time to Reassess')
