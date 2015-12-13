@@ -29,7 +29,7 @@ a = function(){
 myList = list(timeToFirst, timeToSol, timeToReassess)
 myTitle = list('Time to 1st Action', 'Time to Solution', 'Time to Reassess')
 
-png('myHist.png')
+png('./Plots/myHist.png')
 par(mfrow = c(2, 2), mar = c(3, 3, 3, 3))
 for (i in 1:3)
   hist(myList[[i]], main = myTitle[[i]])

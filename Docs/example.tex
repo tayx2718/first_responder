@@ -1,0 +1,169 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\title{First Responders}
+\author{Dylan Badin, Kevin Thompson}
+\date{14-December-2015}
+\begin{document}
+\maketitle
+
+\section{Introduction}
+\textbullet\: The year of 2015 has left a profound impact on the nation. This was felt on December 2, 2015, when two Islamic extremists opened fire on a Christmas party and left 14 dead, and 22 wounded.\\
+\textbullet\: Victims of the tragedy rely on the work of emergency response personnel, such as firefighters and police officers, to provide them with the life-saving treatment they need following such devastating attacks.  \\
+\textbullet\: Unfortunately, active shooter incidents delay the response time necessary to first action and effectively save their lives from preventable deaths. Few studies have been done to investigate the causes of death in such tragedies. \\
+\textbullet\: However, the closest comparable data present to analyze such active shooter incidents comes from military examples from the field of battle open gunfire. \\
+\textbullet\: The most preventable causes of death experienced by these veterans are extremity wound hemorrhage and airway obstruction. TCCC has been shown to save lives on the battlefield with basic training in … \\
+\textbullet\: Civilian personnel in the public eye are already taught basic first aid, CPR, and automated external defribillators (AEDs) but this is hardly effective in the event of a traumatic scenario \\
+\textbullet\:  \\
+
+\section{Methods}
+Looking at the relationship between $CO_{2}$ levels and temperature using 
+Antarctica ice cores.\\ \\
+$Y_{i} = \text{temperature in year i (in $C^{o}$)}
+\\ X_{i} = CO_2 \text{ level in year i (ppm)}$ \\ \\
+Available in 2000 year increments starting in the year -400,000 \\
+Data for year:
+$-400,000 \:, -398,000 \:, -396,000 \:, ...$ \\ (total 200 observations)\\ 
+
+\graphicspath{~/Dropbox/First\_Responder/first\_responder/}
+\includegraphics[width = 10cm]{Picture1.png}
+
+Note for plot 1: ${CO}_2$ and temperature are related
+
+Note for plot 2: The relationsihp between ${CO}_2$ and temperature is roughly 
+linear
+
+\subsection{Linear Regression}
+Simple Linear Regression: \\
+$Y_{i} = B_{0} + B_{1}X_{i} + \varepsilon_{i} \\
+\{\varepsilon\} \sim AR(1) \\
+$
+Note: $ \varepsilon \ne \{\varepsilon\} \sim \mathcal{N}(0, \sigma^2) $ \\
+Note: If we plot the residuals vs. year, there is still a strong relationship\\
+
+\includegraphics{Picture2.png} \\
+Note: residuals are not independent \\ \\
+We need $corr(\varepsilon_{i}, \varepsilon_{i+1}) \ne 0$ \\
+i.e. we want correlated errors/dependence to be taken into consideration in 
+our model. \\ \\
+Let's assume, \\ $corr(\varepsilon_{i}, \varepsilon_{i+1}) = \rho \leftarrow 
+unknown \: parameter \: \forall \: i \\
+corr(\varepsilon_{i}, \varepsilon_{i+2}) = \rho^{2} \\
+corr(\varepsilon_{i}, \varepsilon_{i+j}) = \rho^{j} \\ \\
+\text{Note: }Var(\varepsilon) = \sigma^{2}
+$ \\
+This is known as auto-regressive process of order 1
+$\{\varepsilon\} \sim AR(1) $ \\
+We now have parameters: (${B}_0, {B}_1, \rho, {\sigma}^2$) \\
+$Y_{i} = B_{0} + B_{1}X_{i} + \varepsilon_{i} \\$ \\
+$
+\left( \begin{matrix} Y_{1} \\ \vdots \\ Y_{n} \end{matrix} \right) 
+= \left( \begin{matrix} 1 & X_{1} \\ \vdots & \vdots \\ 1 & X_{n} \end{matrix} 
+\right) * \left( \begin{matrix} B_{0} \\ B_{1} \end{matrix} \right)
++ \left( \begin{matrix} \varepsilon_{1} \\ \vdots \\ \varepsilon_{n} 
+\end{matrix} \right) \\ \\ \\$ 
+$ \vec{Y} = \vec{X}\vec{B} + \vec{\varepsilon}$\\
+
+
+$
+\vec{\varepsilon} \sim \mathcal{N}(0, \sigma^2 \left( \begin{matrix}
+  1 & \rho & \rho^2  & \ldots & \rho^{n-1}\\
+    \rho & 1 & \rho & \ldots & \rho^{n-2}\\
+    \rho^2 & \rho & 1 \\
+  \vdots & \vdots & & \ddots \\
+  \rho^{n-1} & \rho^{n-2} & & & 1\\
+\end{matrix} \right)) \\
+$ \\ \\
+$ cov(\varepsilon_{i}, \varepsilon_{i+1}) = \rho\sigma^{2} \\
+cov(\varepsilon_{i}, \varepsilon_{i+2}) = \rho^{2}\sigma^{2} \\
+$\\
+i.e., $\vec{\varepsilon} \sim \mathcal{N}(0, \Sigma(\sigma^{2}, \rho))$ \\
+i.e., $\vec{Y} | \vec{B}, \sigma^{2}, \rho \sim \mathcal{N}(X\vec{B}, 
+\Sigma(\sigma^{2}, \rho))$
+
+\section{Priors and Posteriors for Bayesian Analysis}
+\subsection{Priors}
+$ p(B) \propto 1 \\
+\sigma^{2} \sim Inv-\chi^{2}(\nu_{0}, \sigma_{0}^{2}) \\
+\rho \sim Unif[0, 1] \rightarrow positive\:relationsip\:between\:CO_{2}\:\&\:temp
+$
+\subsection{Posterior}
+$p(\vec{B}, \sigma^{2}, \rho | \vec{Y}) \propto p(\vec{B}, \sigma^{2}, \rho)  
+* (\vec{Y} | \vec{B}, \sigma^{2}, \rho) \\ $
+$ \propto (\sigma^{2})^{-1 + \frac{\gamma_{0}}{2}} 
+e^{\frac{\nu_{0}\sigma_{0}^{2}}{2\sigma^{2}}}
+I_{\{\rho \in [0,1]\}} \mid\Sigma(\sigma^{2}, \rho)\mid^{\frac{-1}{2}}
+    e^{\frac{-1}{2}(Y - XB)^{T}\Sigma^{-1}(\rho, \sigma^{2})(Y - XB)} $ 
+
+\section{Gibbs Sampler}
+Used to select posterior samples
+\subsection{Gibbs:} 
+\textbullet\: select $(\vec{B}_{(0)}, \sigma_{0}^{2}, \rho_{0})$, set t = 0 \\
+\textbullet\: sample from $(\vec{B}_{(t+1)} \mid \rho_{t}, \sigma_{t}^{2}, 
+\vec{Y})$ [Multivariate Normal] \\ 
+\textbullet\: sample from $(\sigma_{t}^{2}\mid \vec{B}_{(t+1)}, \rho_{t}, 
+\vec{Y})$ [Inv-$\chi^{2}$] \\
+\textbullet\: sample from $(\rho_{t}\mid \vec{B}_{(t+1)}, \sigma_{t}^{2}, 
+\vec{Y})$ [UGLY] \\
+
+\subsection{How to sample from $(\rho\mid \vec{B}, \sigma, \vec{Y})$ :}
+\textbullet\: Inverse-CDF (numerically) difficult depending on the size of 
+the matrix when inverting \\ Note: (n=3000 ~ 1 minute) \\
+\textbullet\: Rejection Sampling $\rightarrow$ need to find a good h(x) to 
+work well with complicated f(x), m is hard to find BUT still feasible \\ \\
+$m \ge \frac{f(x)}{h(x)}$
+
+
+\section{The Metropolis Algorithm}
+\subsection{History}
+Developed in 1940, very general algorithm that doesn't require much brain 
+power (some "tuning") and provides dependent samples.
+
+\includegraphics{Picture3.png}
+Note: density you want to sample from
+
+\subsection{General Idea}
+Want $\{\theta_{(1)}, \theta_{(2)},\theta_{(3)}, ..., \theta_{(M)}\}$
+  such that the collection provides a good approximation to p($\theta$) \\
+  Idea: Imagine I have a sample $\theta^{t}$. We want to add new sample $\theta^{(t+1)}$
+  "propose" a new value $\theta^{*}$ \\
+  Do we want more $\theta^{t} \:or\: \theta^{*}$? more $\theta^{*}$ \\
+  \textbullet\: if $p(\theta^{*}) > p(\theta^{(t)}) \Rightarrow \text{ add }
+  \theta^{*}$ to my collection \\
+  \textbullet\: if $p(\theta^{*}) < p(\theta^{(t)}) \Rightarrow 
+  \text{ sometimes add }\theta^{*}$ to my collection,
+  sometimes not \\
+
+\includegraphics{Picture4.png}
+
+\subsection{Algorithm}
+\textbullet\: Pick a starting value, set t = 0 \\
+\textbullet\: Propose a new value $\theta^{*}$ (from "symmetric" proposal 
+distrubution) \\
+\textbullet\: If $p(\theta^{*}) > p(\theta^{(t)})$, set $p(\theta^{(t+1)}) > 
+p(\theta^{*})$ \\
+\indent if not, set $p(\theta^{(t+1)}) > p(\theta^{t})$ with probability 
+$\alpha$ \\ 
+\indent $\alpha = \frac{p(\theta^{*})}{p(\theta^{t}}$ \\
+Note: since this is a ratio of the same distribution, normalizing constants 
+are unimportant. As a result, p does not need to be a pdf. i.e. we don't need 
+a normalizing constant
+\section{Next Time on STA145}
+\textbullet\: Propose a new value $\theta^{*}$ from a symmetric proposal 
+distribution \\
+\textbullet\: Sample $U \sim U[0, 1]$\\
+if $U \le \frac{p(\theta^{*})}{p(\theta^{(t)})}$, set $\theta^{(t+1)} = 
+  \theta^{*}$ \\
+  else set $\theta^{(t+1)} = \theta^{t}$
+
+
+
+
+
+
+
+\end{document}

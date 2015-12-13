@@ -88,9 +88,11 @@ func.check = function(data, someTitle) {
 }
 
 ## Plots of all times
-level = ('nurse', 'nurse', 'trained', 'untrained', 'trained', 
+level = c('nurse', 'nurse', 'trained', 'untrained', 'trained', 
          'untrained', 'trained', 'untrained', 'trained', 'untrained', 'fire')
+png('../Plots/Airway_Time.png')
 xyplot(airway$Subject ~ airway$Time_to_1st_Action | level)
+dev.off()
 
 
 
