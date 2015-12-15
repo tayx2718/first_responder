@@ -15,6 +15,8 @@ Introduction:
 * Since the start of operation Iraqi Freedom, the United States military has incorporated tactical casualty combat care (TCCC Butler A Decade of TCCC)
 * Initially military soldiers relied on treatment from medics to address their wounds
 * TCCC has been incorporated military wide and has become the standard for trauma care for managing combat trauma on the battlefield (Dickey 2011, Wilensky 2009, http://www.ntoa.org/massemail/CarmonaW12.pdf)
+\graphicspath{../Plots}
+\includegraphics[width = 10cm]{cfr.png}
 * The success has been proven numerically with casualty fatality rate at 19% during WWII, to 15.8% during the Vietnam War, to finally 9.4% during Operation Iraqi Freedom (Holcomb et al J Trauma 2006)
 * Slow transitions are being made to incorporate this assessment and treatment strategy with emergency medical services, known as TECC (http://www.naemt.org/education/tecc/what-is-tecc, Callaway UFF TC PDF)
 * However, as stated previously, emergency services are delayed during active shooter scenarios and this puts victims at risk for treatment that is too late 
