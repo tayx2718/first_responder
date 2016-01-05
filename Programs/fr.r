@@ -40,15 +40,14 @@ addtorow$command = c("& \\multicolumn{2}{c}{Time to Solution} \\\\\n",
                     "Group & Trained & Untrained \\\\\n")
 
 art.Sol = cbind(Arterial_Trained, Arterial_Untrained)
-xtable(art.Sol, add.to.row = addtorow, include.colnames = FALSE)
+xtable(art.Sol, add.to.row = addtorow, include.colnames = TRUE)
 
 # XY Plot
-level = c('nurse', 'nurse', 'trained', 'untrained', 'trained', 
-         'untrained', 'trained', 'untrained', 'trained', 'untrained')
+level = c('nurse', 'nurse', 'trained', 'untrained', 'trained', 'untrained', 'untrained', 'trained', 'trained', 'untrained', 'ems')
 png('../Plots/Arterial_Time.png')
-xyplot(airway$Subject ~ airway$Time_to_1st_Action, groups = level,
-      key = list(corner = c(1, 1), cex=0.95, title = 'Training', text = list(unique(level)), points = list(pch = 1:3, col = 1:3)), pch = 1:3,
-      main = 'Time to Solution',
+xyplot(arterial$Subject ~ art.timeToSol, groups = level,
+      key = list(corner = c(1, 1), cex=0.95, title = 'Training', text = list(unique(level)), points = list(pch = 1:3, col = 1:3)), pch = 1:3, col = 1:3,
+      main = 'Time to Solution', xlim = c(0, 600),
       ylab = 'Group', xlab = 'Time in Seconds')
 dev.off()
 
@@ -64,15 +63,14 @@ addtorow$command = c("& \\multicolumn{2}{c}{Time to Solution} \\\\\n",
                     "Group & Trained & Untrained \\\\\n")
 
 air.Sol = cbind(Airway_Trained, Airway_Untrained)
-xtable(air.Sol, add.to.row = addtorow, include.colnames = FALSE)
+xtable(air.Sol, add.to.row = addtorow, include.colnames = TRUE)
 
 # XY Plot
-level = c('nurse', 'nurse', 'trained', 'untrained', 'trained', 
-         'untrained', 'trained', 'untrained', 'trained', 'untrained', 'fire')
+level = c('nurse', 'nurse', 'trained', 'untrained', 'trained', 'untrained', 'trained', 'untrained', 'trained', 'untrained', 'fire')
 png('../Plots/Airway_Time.png')
-xyplot(airway$Subject ~ airway$Time_to_1st_Action, groups = level,
-      key = list(corner = c(1, 1), cex=0.95, title = 'Training', text = list(unique(level)), points = list(pch = 1:4, col = 1:4)), pch = 1:4,
-      main = 'Time to Solution',
+xyplot(airway$Subject ~ timeToSol, groups = level,
+      key = list(corner = c(1, 1), cex=0.95, title = 'Training', text = list(unique(level)), points = list(pch = 1:4, col = 1:4)), pch = 1:4, col = 1:4,
+      main = 'Time to Solution', xlim = c(0,600),
       ylab = 'Group', xlab = 'Time in Seconds')
 dev.off()
 
