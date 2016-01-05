@@ -1,1 +1,4 @@
 http://www.stat.berkeley.edu/~spector/
+
+pandoc -s file.in -o file.tex
+pdflatex file.tex

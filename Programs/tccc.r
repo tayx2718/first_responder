@@ -1,20 +1,26 @@
 ## Data
-cfr = read.csv('./Data/tccc/cfr.csv', header=TRUE)
-kia = read.csv('./Data/tccc/kia.csv', header=TRUE)
-pp_deaths_oif_oef = read.csv('./Data/tccc/pp_deaths_oif_oef.csv', header=TRUE)
+cfr = read.csv('../Data/tccc/cfr.csv', header=TRUE)
+kia = read.csv('../Data/tccc/kia.csv', header=TRUE)
+pp_deaths_oif_oef = read.csv('../Data/tccc/pp_deaths_oif_oef.csv', header=TRUE)
 
 
-## CFR
-x11()
-plot(x = cfr$war, y = cfr$percent)
+## CFR: Case Fertality Rate, by war
+# war: WWII, Vietnam, OIF/OEF
+png('../Plots/cfr.png')
+plot(x = cfr$war, y = cfr$percent, main="Case Fertality Rate")
+dev.off()
 
-x11()
-par(mfrow = c(1, 2), mar = c(3, 3, 3, 3))
 ## KIA
-plot(x = kia$cause, y = kia$percent, main = 'kia')
+# causes of death in vieatnam war
+png('../Plots/kia.png')
+plot(x = kia$cause, y = kia$percent, main = 'Causes of Death', sub = 'in Vietnam War')
+dev.off()
 
 ## PP Deaths Iraq
-plot(x = pp_deaths_oif_oef$type, y = pp_deaths_oif_oef$percent, main = 'Iraq')
+png('../Plots/deaths_oif_oef.png')
+plot(x = pp_deaths_oif_oef$type, y = pp_deaths_oif_oef$percent, 
+     main = 'Potentially Preventable Deaths', sub = 'in OIF/OEF')
+dev.off()
 
 
 ## Plot function

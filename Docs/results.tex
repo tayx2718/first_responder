@@ -12,55 +12,41 @@
 \date{22-December-2015}
 \begin{document}
 \maketitle
+\graphicspath{ {../Plots/} }
 
-\section{Results}
+\section{Arterial}
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+ & Trained & Untrained \\ 
+  \hline
+1 & 144.00 & 480.00 \\ 
+  2 & 175.00 & 480.00 \\ 
+  3 & 287.00 & 480.00 \\ 
+  4 & 207.00 & 480.00 \\ 
+   \hline
+\end{tabular}
+\end{table}
 
-\begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-Welch two-sample t-test 
-\item
-two populutions with variance assumed to be unequal
-\end{itemize}
+\includegraphics[width = 10cm]{Arterial_Time.png}
 
-\begin{hyp}
-Training of civilians will decrease the time to solution in victims experiencing 
-airway difficulties.
-\end{hyp}
-$H_0$ : $\bar{X_{1}} - \bar{X_{2}} \ge 0 $\\
-$H_0$ : $\bar{X_{1}} - \bar{X_{2}} < 0 $
-\begin{itemize}
-\item where ${X_{1}}$ is trained and ${X_{2}}$ is untrained
-\end{itemize}
+\section{Airway}
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+ & airwayTrained & airwayUntrained \\ 
+  \hline
+1 & 11.00 & 480.00 \\ 
+  2 & 38.00 & 480.00 \\ 
+  3 & 18.00 & 160.00 \\ 
+  4 & 15.00 & 480.00 \\ 
+   \hline
+\end{tabular}
+\end{table}
 
-Results: \\
-$t = -4.7304$ \\
-$df = 3.0338$ \\ 
-$p-value = 0.008729$ \\
-$\bar{x_{1}} = 20.5$ \\
-$\bar{x_{2}} = 400.0$ \\
-$95\% CI:(-\infty, -191.56)$
-
-\begin{hyp}
-Training of civilians will decrease the time to solution in victims experiencing 
-arterial bleading.
-\end{hyp}
-$H_0$ : $\bar{X_{1}} - \bar{X_{2}} \ge 0 $\\
-$H_0$ : $\bar{X_{1}} - \bar{X_{2}} < 0 $
-\begin{itemize}
-\item where ${X_{1}}$ is trained and ${X_{2}}$ is untrained
-\end{itemize}
-
-Results: \\
-$t = -9.004$ \\
-$df = 3$ \\ 
-$p-value = 0.001446$ \\
-$\bar{x_{1}} = 203.25$ \\
-$\bar{x_{2}} = 480.0$ \\
-$95\% CI:(-\infty, -204.42)$
-
-
-
+\includegraphics[width = 10cm]{Airway_Time.png}
 
 \end{document}
 
