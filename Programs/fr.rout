@@ -21,14 +21,76 @@ Type 'q()' to quit R.
 
 > # initial setup
 > library('xtable') # for latex functions
-> library('lattice') # for latex functions
+> library('lattice') # for graph functions
 > 
 > ## Data
-> airway = read.csv('../Data/airway.csv', header=TRUE)
-> arterial = read.csv('../Data/arterial.csv', header=TRUE)
-> #pretableQ1 = read.csv('../Data/pretableQ1.csv', header=TRUE)
-> #pretableQ2 = read.csv('../Data/pretableQ2.csv', header=TRUE)[[1:5]]
-> #pretableQ3 = read.csv('../Data/pretableQ3.csv', header=TRUE)[[1:5]]
+> airway = read.csv('../Data/airway.csv', header=TRUE)[,1:4]
+> arterial = read.csv('../Data/arterial.csv', header=TRUE)[,1:4]
+> 
+> ## Initial tables
+> addtorow = list()
+> addtorow$pos = list(0, 0)
+> addtorow$command = c("& \\multicolumn{2}{c}{Time to Solution} \\\\\n",
++                     "Group & Trained & Untrained \\\\\n")
+> 
+> xtable(airway, add.to.row = addtorow, include.colnames = TRUE)
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Sun Jan 31 14:21:43 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllll}
+  \hline
+ & Subject & Time\_to\_1st\_Action & Time\_to\_Solution & Time\_to\_Reassess \\ 
+  \hline
+1 & Nursing Grad & 1m 27s & 8m & 8m \\ 
+  2 & Nursing Undergrad & 1m 3s & 7m 36s & 7m 36s \\ 
+  3 & Teacher - Trained & 11s & 11s & 2m 24s \\ 
+  4 & Teachers - Untrained & 1m & 8m & 8m \\ 
+  5 & City - Trained & 38s & 38s & 3m 38s \\ 
+  6 & City - Untrained & 32s & 8m & 1m 38s \\ 
+  7 & Security - Trained & 18s & 18s & 2m 42s \\ 
+  8 & Security - Untrained & 18s & 2m 40s & 1m 58s \\ 
+  9 & Students - Trained & 15s & 15s & 2m 26s \\ 
+  10 & Students - Untrained & 1m 2s & 8m & 3m 22s \\ 
+  11 & OCFA & 25s & 1m 21s & 1m 21s \\ 
+   \hline
+\end{tabular}
+\end{table}
+> 
+> addtorow = list()
+> addtorow$pos = list(0, 0)
+> addtorow$command = c("& \\multicolumn{2}{c}{Time to Solution} \\\\\n",
++                     "Group & Trained & Untrained \\\\\n")
+> 
+> xtable(arterial, add.to.row = addtorow, include.colnames = TRUE)
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Sun Jan 31 14:21:43 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllll}
+  \hline
+ & Subject & Time.to.1st.Action & Tourniquet.Applied. & Time.to.Solution \\ 
+  \hline
+1 & 1 Nursing Grad & 1m 15s & No & 8m \\ 
+  2 & 2 Nursing Undergrad & 1m &  No & 8m \\ 
+  3 & 3 Teacher - Trained & 4s & Yes & 2m 24s \\ 
+  4 & 4 Teachers - Untrained & 2m 50s & No & 8m \\ 
+  5 & 5 City - Trained & 1m & Yes & 2m 55s \\ 
+  6 & 6 City - Untrained & 4m 55s & No & 8m \\ 
+  7 & 7 Security - Untrained & 30s & Yes & 8m \\ 
+  8 & 8 Security - Trained & 45s & Yes & 4m 47s \\ 
+  9 & 9 Students - Trained & 30s & Yes & 3m 27s \\ 
+  10 & 10 Students - Untrained & 37s & Yes & 8m \\ 
+  11 & 11  EMS baseline & 48s & Yes & 2m 38s \\ 
+  12 &  &  &  &  \\ 
+  13 &  &  &  &  \\ 
+  14 &  &  &  &  \\ 
+  15 &  &  &  &  \\ 
+  16 &  &  &  &  \\ 
+  17 &  &  &  &  \\ 
+   \hline
+\end{tabular}
+\end{table}
 > 
 > ## General Functions
 > # convert string in from 'Xm XXs', where X is numeric value, to number
@@ -63,7 +125,7 @@ Type 'q()' to quit R.
 > art.Sol = cbind(Arterial_Trained, Arterial_Untrained)
 > xtable(art.Sol, add.to.row = addtorow, include.colnames = TRUE)
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
-% Mon Jan  4 21:05:25 2016
+% Sun Jan 31 14:21:43 2016
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrr}
@@ -89,6 +151,20 @@ Type 'q()' to quit R.
 null device 
           1 
 > 
+> # barplot
+> airwayTable = matrix(c(34.75, 203.25, 111, 480, 48, 158), nrow=2, ncol=3)
+> colnames(airwayTable) = c('Average \n(Trained)', 'Average \n(Untrained) All', 'EMS \nbaseline')
+> png('../Plots/Arterial_Plot.png')
+> mp = barplot(airwayTable, main='Hemorrhage Control Scenario (Matched Groups)', 
++         xlab='Time (sec)', legend=c('Time to 1st Action','Time to Solution'),
++         horiz=TRUE, col=c('white', 'grey'), xlim=c(0,500),
++         args.legend=list(x="bottomright"))
+> dev.off()
+null device 
+          1 
+> 
+> 
+> 
 > ## Airway
 > # Table of time to first solution
 > timeToSol = toSeconds(airway$Time_to_Solution)
@@ -103,7 +179,7 @@ null device
 > air.Sol = cbind(Airway_Trained, Airway_Untrained)
 > xtable(air.Sol, add.to.row = addtorow, include.colnames = TRUE)
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
-% Mon Jan  4 21:05:25 2016
+% Sun Jan 31 14:21:43 2016
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrr}
@@ -129,7 +205,62 @@ null device
 null device 
           1 
 > 
+> # barplot
+> airwayTable = matrix(c(20.5, 32.6, 43, 423, 25, 81), nrow=2, ncol=3)
+> colnames(airwayTable) = c('Average \n(Trained)', 'Average \n(Untrained)', 'OFCA')
+> png('../Plots/Airway_Plot1.png')
+> mp = barplot(airwayTable, main='Compromised Airway Scenario (Matched Groups)', 
++         xlab='Time (sec)', legend=c('Time to 1st Action','Time to Solution'),
++         horiz=TRUE, col=c('white', 'grey'), xlim=c(0,500),
++         args.legend=list(x="bottomright"))
+> dev.off()
+null device 
+          1 
+> 
+> airwayTable = matrix(c(21, 33, 54, 423), nrow=2, ncol=2)
+> colnames(airwayTable) = c('Average \n(Trained) All', 'Average \n(Untrained) All')
+> png('../Plots/Airway_Plot2.png')
+> mp = barplot(airwayTable, main='Compromised Airway Scenario (All Groups)', 
++         xlab='Time (sec)', legend=c('Time to 1st Action','Time to Solution'),
++         horiz=TRUE, col=c('white', 'grey'), xlim=c(0,500),
++         args.legend=list(x="bottomright"))
+> dev.off()
+null device 
+          1 
+> 
+> 
+> 
+> 
+> # t-test for time to first solution
+> print(t.test(x=Trained, y=Untrained, alternative=c('less')))
+
+	Welch Two Sample t-test
+
+data:  Trained and Untrained
+t = -9.004, df = 3, p-value = 0.001446
+alternative hypothesis: true difference in means is less than 0
+95 percent confidence interval:
+     -Inf -204.416
+sample estimates:
+mean of x mean of y 
+   203.25    480.00 
+
+> 
+> print(t.test(x=airwayTrained, y=airwayUntrained, alternative=c('less')))
+
+	Welch Two Sample t-test
+
+data:  airwayTrained and airwayUntrained
+t = -4.7304, df = 3.0338, p-value = 0.008729
+alternative hypothesis: true difference in means is less than 0
+95 percent confidence interval:
+      -Inf -191.5561
+sample estimates:
+mean of x mean of y 
+     20.5     400.0 
+
+> 
 > quit()
 > proc.time()
    user  system elapsed 
-  0.373   0.191   0.365 
+  0.405   0.227   0.397 

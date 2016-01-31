@@ -1,0 +1,12 @@
+Group	Loosen the TQ	Remove the TQ	Reassure them and leave tourniquet in place	Tourniquets are an outdated means for hemorrhage control
+Nursing Grad			2	2
+Nursing Undergrad			4	
+Teacher - Trained			5	
+Teachers - Untrained			3	
+City - Trained			6	
+City - Untrained			5	
+Security - Trained			3	
+Security - Untrained			6	
+Students - Trained			6	
+Students - Untrained	1		3	1
+FIRE/EMS	1	1	2	

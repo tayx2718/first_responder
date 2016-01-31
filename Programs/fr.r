@@ -1,13 +1,25 @@
 # initial setup
 library('xtable') # for latex functions
-library('lattice') # for latex functions
+library('lattice') # for graph functions
 
 ## Data
-airway = read.csv('../Data/airway.csv', header=TRUE)
-arterial = read.csv('../Data/arterial.csv', header=TRUE)
-#pretableQ1 = read.csv('../Data/pretableQ1.csv', header=TRUE)
-#pretableQ2 = read.csv('../Data/pretableQ2.csv', header=TRUE)[[1:5]]
-#pretableQ3 = read.csv('../Data/pretableQ3.csv', header=TRUE)[[1:5]]
+airway = read.csv('../Data/airway.csv', header=TRUE)[,1:4]
+arterial = read.csv('../Data/arterial.csv', header=TRUE)[,1:4]
+
+## Initial tables
+addtorow = list()
+addtorow$pos = list(0, 0)
+addtorow$command = c("& \\multicolumn{2}{c}{Time to Solution} \\\\\n",
+                    "Group & Trained & Untrained \\\\\n")
+
+xtable(airway, add.to.row = addtorow, include.colnames = TRUE)
+
+addtorow = list()
+addtorow$pos = list(0, 0)
+addtorow$command = c("& \\multicolumn{2}{c}{Time to Solution} \\\\\n",
+                    "Group & Trained & Untrained \\\\\n")
+
+xtable(arterial, add.to.row = addtorow, include.colnames = TRUE)
 
 ## General Functions
 # convert string in from 'Xm XXs', where X is numeric value, to number
@@ -51,6 +63,18 @@ xyplot(arterial$Subject ~ art.timeToSol, groups = level,
       ylab = 'Group', xlab = 'Time in Seconds')
 dev.off()
 
+# barplot
+airwayTable = matrix(c(34.75, 203.25, 111, 480, 48, 158), nrow=2, ncol=3)
+colnames(airwayTable) = c('Average \n(Trained)', 'Average \n(Untrained) All', 'EMS \nbaseline')
+png('../Plots/Arterial_Plot.png')
+mp = barplot(airwayTable, main='Hemorrhage Control Scenario (Matched Groups)', 
+        xlab='Time (sec)', legend=c('Time to 1st Action','Time to Solution'),
+        horiz=TRUE, col=c('white', 'grey'), xlim=c(0,600),
+        args.legend=list(x="bottomright"))
+dev.off()
+
+
+
 ## Airway
 # Table of time to first solution
 timeToSol = toSeconds(airway$Time_to_Solution)
@@ -74,17 +98,34 @@ xyplot(airway$Subject ~ timeToSol, groups = level,
       ylab = 'Group', xlab = 'Time in Seconds')
 dev.off()
 
-quit()
+# barplot
+airwayTable = matrix(c(20.5, 32.6, 43, 423, 25, 81), nrow=2, ncol=3)
+colnames(airwayTable) = c('Average \n(Trained)', 'Average \n(Untrained)', 'OFCA')
+png('../Plots/Airway_Plot1.png')
+mp = barplot(airwayTable, main='Compromised Airway Scenario (Matched Groups)', 
+        xlab='Time (sec)', legend=c('Time to 1st Action','Time to Solution'),
+        horiz=TRUE, col=c('white', 'grey'), xlim=c(0,500),
+        args.legend=list(x="bottomright"))
+dev.off()
 
+airwayTable = matrix(c(21, 33, 54, 423), nrow=2, ncol=2)
+colnames(airwayTable) = c('Average \n(Trained) All', 'Average \n(Untrained) All')
+png('../Plots/Airway_Plot2.png')
+mp = barplot(airwayTable, main='Compromised Airway Scenario (All Groups)', 
+        xlab='Time (sec)', legend=c('Time to 1st Action','Time to Solution'),
+        horiz=TRUE, col=c('white', 'grey'), xlim=c(0,500),
+        args.legend=list(x="bottomright"))
+dev.off()
 
 
 
 
 # t-test for time to first solution
-#print(t.test(x=Trained, y=Untrained, alternative=c('less')))
+print(t.test(x=Trained, y=Untrained, alternative=c('less')))
 
 print(t.test(x=airwayTrained, y=airwayUntrained, alternative=c('less')))
 
+quit()
 
 # timeToFirst = toSeconds(airway$Time_to_1st_Action)
 # timeToReassess = toSeconds(airway$Time_to_Reassess)
