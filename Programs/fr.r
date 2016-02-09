@@ -76,6 +76,27 @@ dev.off()
 
 
 ## Airway
+# Table of time to first action
+timeToAction = toSeconds(airway$Time_to_1st_Action)
+timeToSol = toSeconds(airway$Time_to_Solution)
+timeToBoth = c(timeToAction, timeToSol)
+head(airway)
+
+level = c('nurse', 'nurse', 'trained', 'untrained', 'trained', 'untrained', 'trained', 'untrained', 'trained', 'untrained', 'fire')
+bothLevel = rep(level, 2)
+cat1 = rep('action', 11)
+cat2 = rep('solution', 11)
+catBoth = c(cat1, cat2)
+subjectBoth = rep(airway$Subject, 2)
+
+png('../Plots/Airway_Action.png')
+xyplot( subjectBoth ~ timeToBoth| catBoth, 
+       groups = bothLevel, pch = 19:25,
+        auto.key = list(corner = c(1, .95), cex = 0.5, title = 'Cat'), 
+        xlab = 'Time in Seconds', ylab = 'Group', main = 'Time to First Action vs Solution
+        by Training Level')  
+dev.off()
+
 # Table of time to first solution
 timeToSol = toSeconds(airway$Time_to_Solution)
 Airway_Trained = timeToSol[grep(' (T|t)rained', airway$Subject)]

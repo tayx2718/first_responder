@@ -35,7 +35,7 @@ Type 'q()' to quit R.
 > 
 > xtable(airway, add.to.row = addtorow, include.colnames = TRUE)
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
-% Sun Jan 31 14:21:43 2016
+% Mon Feb  8 20:42:51 2016
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllll}
@@ -64,7 +64,7 @@ Type 'q()' to quit R.
 > 
 > xtable(arterial, add.to.row = addtorow, include.colnames = TRUE)
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
-% Sun Jan 31 14:21:43 2016
+% Mon Feb  8 20:42:51 2016
 \begin{table}[ht]
 \centering
 \begin{tabular}{rllll}
@@ -125,7 +125,7 @@ Type 'q()' to quit R.
 > art.Sol = cbind(Arterial_Trained, Arterial_Untrained)
 > xtable(art.Sol, add.to.row = addtorow, include.colnames = TRUE)
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
-% Sun Jan 31 14:21:43 2016
+% Mon Feb  8 20:42:51 2016
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrr}
@@ -157,7 +157,7 @@ null device
 > png('../Plots/Arterial_Plot.png')
 > mp = barplot(airwayTable, main='Hemorrhage Control Scenario (Matched Groups)', 
 +         xlab='Time (sec)', legend=c('Time to 1st Action','Time to Solution'),
-+         horiz=TRUE, col=c('white', 'grey'), xlim=c(0,500),
++         horiz=TRUE, col=c('white', 'grey'), xlim=c(0,600),
 +         args.legend=list(x="bottomright"))
 > dev.off()
 null device 
@@ -166,6 +166,36 @@ null device
 > 
 > 
 > ## Airway
+> # Table of time to first action
+> timeToAction = toSeconds(airway$Time_to_1st_Action)
+> timeToSol = toSeconds(airway$Time_to_Solution)
+> timeToBoth = c(timeToAction, timeToSol)
+> head(airway)
+               Subject Time_to_1st_Action Time_to_Solution Time_to_Reassess
+1         Nursing Grad             1m 27s               8m               8m
+2    Nursing Undergrad              1m 3s           7m 36s           7m 36s
+3    Teacher - Trained                11s              11s           2m 24s
+4 Teachers - Untrained                 1m               8m               8m
+5       City - Trained                38s              38s           3m 38s
+6     City - Untrained                32s               8m           1m 38s
+> 
+> level = c('nurse', 'nurse', 'trained', 'untrained', 'trained', 'untrained', 'trained', 'untrained', 'trained', 'untrained', 'fire')
+> bothLevel = rep(level, 2)
+> cat1 = rep('action', 11)
+> cat2 = rep('solution', 11)
+> catBoth = c(cat1, cat2)
+> subjectBoth = rep(airway$Subject, 2)
+> 
+> png('../Plots/Airway_Action.png')
+> xyplot( subjectBoth ~ timeToBoth| catBoth, 
++        groups = bothLevel, pch = 19:25,
++         auto.key = list(corner = c(1, .95), cex = 0.5, title = 'Cat'), 
++         xlab = 'Time in Seconds', ylab = 'Group', main = 'Time to First Action vs Solution
++         by Training Level')  
+> dev.off()
+null device 
+          1 
+> 
 > # Table of time to first solution
 > timeToSol = toSeconds(airway$Time_to_Solution)
 > Airway_Trained = timeToSol[grep(' (T|t)rained', airway$Subject)]
@@ -179,7 +209,7 @@ null device
 > air.Sol = cbind(Airway_Trained, Airway_Untrained)
 > xtable(air.Sol, add.to.row = addtorow, include.colnames = TRUE)
 % latex table generated in R 3.2.2 by xtable 1.8-0 package
-% Sun Jan 31 14:21:43 2016
+% Mon Feb  8 20:42:51 2016
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrr}
@@ -263,4 +293,4 @@ mean of x mean of y
 > quit()
 > proc.time()
    user  system elapsed 
-  0.405   0.227   0.397 
+  0.468   0.218   0.468 
