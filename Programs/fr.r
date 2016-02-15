@@ -1,6 +1,9 @@
 # initial setup
 library('xtable') # for latex functions
 library('lattice') # for graph functions
+# to do
+# 1. add arterial action/solution graph
+# 2. make table of what action was
 
 ## Data
 airway = read.csv('../Data/airway.csv', header=TRUE)[,1:4]
@@ -38,6 +41,28 @@ toSeconds = function(col) {
 ## Pre-Test
 # None at the moment. Apparently not as important for analysis
 ## Arterial
+timeToAction = toSeconds(arterial$Time.to.1st.Action)
+timeToSol = toSeconds(arterial$Time.to.Solution)
+timeToBoth = c(timeToAction, timeToSol)
+print(timeToAction)
+print(timeToSol)
+
+level = c('nurse', 'nurse', 'trained', 'untrained', 'trained', 'untrained', 'untrained', 'trained', 'trained', 'untrained', 'ems')
+bothLevel = rep(level, 2)
+cat1 = rep('action', 11)
+cat2 = rep('solution', 11)
+catBoth = c(cat1, cat2)
+subjectBoth = rep(arterial$Subject, 2)
+
+png('../Plots/Arterial_Action.png')
+xyplot( subjectBoth ~ timeToBoth| catBoth, 
+        groups = bothLevel, pch = 19:25,
+        auto.key = list(corner = c(1, .95), cex = 0.5, title = 'Cat'), 
+        xlab = 'Time in Seconds', ylab = 'Group', main = 'Time to First Action vs Solution
+        by Training Level')  
+dev.off()
+
+
 
 # Table of time to first solution
 art.timeToFirst = toSeconds(arterial$Time.to.1st.Action)
@@ -76,7 +101,7 @@ dev.off()
 
 
 ## Airway
-# Table of time to first action
+# Table of time to first action and solution
 timeToAction = toSeconds(airway$Time_to_1st_Action)
 timeToSol = toSeconds(airway$Time_to_Solution)
 timeToBoth = c(timeToAction, timeToSol)

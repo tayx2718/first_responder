@@ -1,1 +1,316 @@
-Fatal error: cannot open file 'fr.r.r': No such file or directory
+
+R version 3.2.3 (2015-12-10) -- "Wooden Christmas-Tree"
+Copyright (C) 2015 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin13.4.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> # initial setup
+> library('xtable') # for latex functions
+> library('lattice') # for graph functions
+> 
+> ## Data
+> airway = read.csv('../Data/airway.csv', header=TRUE)[,1:4]
+> arterial = read.csv('../Data/arterial.csv', header=TRUE)[,1:4]
+> 
+> ## Initial tables
+> addtorow = list()
+> addtorow$pos = list(0, 0)
+> addtorow$command = c("& \\multicolumn{2}{c}{Time to Solution} \\\\\n",
++                     "Group & Trained & Untrained \\\\\n")
+> 
+> xtable(airway, add.to.row = addtorow, include.colnames = TRUE)
+% latex table generated in R 3.2.3 by xtable 1.8-0 package
+% Fri Feb 12 17:56:38 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllll}
+  \hline
+ & Subject & Time\_to\_1st\_Action & Time\_to\_Solution & Time\_to\_Reassess \\ 
+  \hline
+1 & Nursing Grad & 1m 27s & 8m & 8m \\ 
+  2 & Nursing Undergrad & 1m 3s & 7m 36s & 7m 36s \\ 
+  3 & Teacher - Trained & 11s & 11s & 2m 24s \\ 
+  4 & Teachers - Untrained & 1m & 8m & 8m \\ 
+  5 & City - Trained & 38s & 38s & 3m 38s \\ 
+  6 & City - Untrained & 32s & 8m & 1m 38s \\ 
+  7 & Security - Trained & 18s & 18s & 2m 42s \\ 
+  8 & Security - Untrained & 18s & 2m 40s & 1m 58s \\ 
+  9 & Students - Trained & 15s & 15s & 2m 26s \\ 
+  10 & Students - Untrained & 1m 2s & 8m & 3m 22s \\ 
+  11 & OCFA & 25s & 1m 21s & 1m 21s \\ 
+   \hline
+\end{tabular}
+\end{table}
+> 
+> addtorow = list()
+> addtorow$pos = list(0, 0)
+> addtorow$command = c("& \\multicolumn{2}{c}{Time to Solution} \\\\\n",
++                     "Group & Trained & Untrained \\\\\n")
+> 
+> xtable(arterial, add.to.row = addtorow, include.colnames = TRUE)
+% latex table generated in R 3.2.3 by xtable 1.8-0 package
+% Fri Feb 12 17:56:38 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rllll}
+  \hline
+ & Subject & Time.to.1st.Action & Tourniquet.Applied. & Time.to.Solution \\ 
+  \hline
+1 & 1 Nursing Grad & 1m 15s & No & 8m \\ 
+  2 & 2 Nursing Undergrad & 1m &  No & 8m \\ 
+  3 & 3 Teacher - Trained & 4s & Yes & 2m 24s \\ 
+  4 & 4 Teachers - Untrained & 2m 50s & No & 8m \\ 
+  5 & 5 City - Trained & 1m & Yes & 2m 55s \\ 
+  6 & 6 City - Untrained & 4m 55s & No & 8m \\ 
+  7 & 7 Security - Untrained & 30s & Yes & 8m \\ 
+  8 & 8 Security - Trained & 45s & Yes & 4m 47s \\ 
+  9 & 9 Students - Trained & 30s & Yes & 3m 27s \\ 
+  10 & 10 Students - Untrained & 37s & Yes & 8m \\ 
+  11 & 11  EMS baseline & 48s & Yes & 2m 38s \\ 
+   \hline
+\end{tabular}
+\end{table}
+> 
+> ## General Functions
+> # convert string in from 'Xm XXs', where X is numeric value, to number
+> #   of seconds. supress warning since data has missing values, treated 
+> #   as N/A
+> toSeconds = function(col) {
++   minutes = suppressWarnings(as.numeric(gsub('^.*([0-9]+)m.*$', '\\1', col)))
++   seconds = suppressWarnings(as.numeric(gsub('^.*\\D([0-9])s.*$', '\\1', col)))
++   seconds2 = suppressWarnings(as.numeric(gsub('^.*([0-9]{2})s.*$', '\\1', col)))
++   minutes[is.na(minutes)] <- 0
++   seconds[is.na(seconds)] <- 0
++   seconds2[is.na(seconds2)] <- 0
++   return(seconds + seconds2 + minutes * 60)
++ }
+> 
+> ## Pre-Test
+> # None at the moment. Apparently not as important for analysis
+> ## Arterial
+> timeToAction = toSeconds(arterial$Time.to.1st.Action)
+> timeToSol = toSeconds(arterial$Time.to.Solution)
+> timeToBoth = c(timeToAction, timeToSol)
+> print(timeToAction)
+ [1]  75  60   0 170  60 295  30  45  30  37  48
+> print(timeToSol)
+ [1] 480 480 144 480 175 480 480 287 207 480 158
+> 
+> level = c('nurse', 'nurse', 'trained', 'untrained', 'trained', 'untrained', 'untrained', 'trained', 'trained', 'untrained', 'ems')
+> bothLevel = rep(level, 2)
+> cat1 = rep('action', 11)
+> cat2 = rep('solution', 11)
+> catBoth = c(cat1, cat2)
+> subjectBoth = rep(arterial$Subject, 2)
+> 
+> png('../Plots/Arterial_Action.png')
+> xyplot( subjectBoth ~ timeToBoth| catBoth, 
++         groups = bothLevel, pch = 19:25,
++         auto.key = list(corner = c(1, .95), cex = 0.5, title = 'Cat'), 
++         xlab = 'Time in Seconds', ylab = 'Group', main = 'Time to First Action vs Solution
++         by Training Level')  
+> dev.off()
+null device 
+          1 
+> 
+> 
+> 
+> # Table of time to first solution
+> art.timeToFirst = toSeconds(arterial$Time.to.1st.Action)
+> art.timeToSol = toSeconds(arterial$Time.to.Solution)
+> 
+> Arterial_Trained = art.timeToSol[grep(' (T|t)rained', arterial$Subject)]
+> Arterial_Untrained = art.timeToSol[grep('(U|u)ntrained', arterial$Subject)]
+> 
+> addtorow = list()
+> addtorow$pos = list(0, 0)
+> addtorow$command = c("& \\multicolumn{2}{c}{Time to Solution} \\\\\n",
++                     "Group & Trained & Untrained \\\\\n")
+> 
+> art.Sol = cbind(Arterial_Trained, Arterial_Untrained)
+> xtable(art.Sol, add.to.row = addtorow, include.colnames = TRUE)
+% latex table generated in R 3.2.3 by xtable 1.8-0 package
+% Fri Feb 12 17:56:38 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+ & Arterial\_Trained & Arterial\_Untrained \\ 
+  \hline
+1 & 144.00 & 480.00 \\ 
+  2 & 175.00 & 480.00 \\ 
+  3 & 287.00 & 480.00 \\ 
+  4 & 207.00 & 480.00 \\ 
+   \hline
+\end{tabular}
+\end{table}
+> 
+> # XY Plot
+> level = c('nurse', 'nurse', 'trained', 'untrained', 'trained', 'untrained', 'untrained', 'trained', 'trained', 'untrained', 'ems')
+> png('../Plots/Arterial_Time.png')
+> xyplot(arterial$Subject ~ art.timeToSol, groups = level,
++       key = list(corner = c(1, 1), cex=0.95, title = 'Training', text = list(unique(level)), points = list(pch = 1:3, col = 1:3)), pch = 1:3, col = 1:3,
++       main = 'Time to Solution', xlim = c(0, 600),
++       ylab = 'Group', xlab = 'Time in Seconds')
+> dev.off()
+null device 
+          1 
+> 
+> # barplot
+> airwayTable = matrix(c(34.75, 203.25, 111, 480, 48, 158), nrow=2, ncol=3)
+> colnames(airwayTable) = c('Average \n(Trained)', 'Average \n(Untrained) All', 'EMS \nbaseline')
+> png('../Plots/Arterial_Plot.png')
+> mp = barplot(airwayTable, main='Hemorrhage Control Scenario (Matched Groups)', 
++         xlab='Time (sec)', legend=c('Time to 1st Action','Time to Solution'),
++         horiz=TRUE, col=c('white', 'grey'), xlim=c(0,600),
++         args.legend=list(x="bottomright"))
+> dev.off()
+null device 
+          1 
+> 
+> 
+> 
+> ## Airway
+> # Table of time to first action and solution
+> timeToAction = toSeconds(airway$Time_to_1st_Action)
+> timeToSol = toSeconds(airway$Time_to_Solution)
+> timeToBoth = c(timeToAction, timeToSol)
+> head(airway)
+               Subject Time_to_1st_Action Time_to_Solution Time_to_Reassess
+1         Nursing Grad             1m 27s               8m               8m
+2    Nursing Undergrad              1m 3s           7m 36s           7m 36s
+3    Teacher - Trained                11s              11s           2m 24s
+4 Teachers - Untrained                 1m               8m               8m
+5       City - Trained                38s              38s           3m 38s
+6     City - Untrained                32s               8m           1m 38s
+> 
+> level = c('nurse', 'nurse', 'trained', 'untrained', 'trained', 'untrained', 'trained', 'untrained', 'trained', 'untrained', 'fire')
+> bothLevel = rep(level, 2)
+> cat1 = rep('action', 11)
+> cat2 = rep('solution', 11)
+> catBoth = c(cat1, cat2)
+> subjectBoth = rep(airway$Subject, 2)
+> 
+> png('../Plots/Airway_Action.png')
+> xyplot( subjectBoth ~ timeToBoth| catBoth, 
++        groups = bothLevel, pch = 19:25,
++         auto.key = list(corner = c(1, .95), cex = 0.5, title = 'Cat'), 
++         xlab = 'Time in Seconds', ylab = 'Group', main = 'Time to First Action vs Solution
++         by Training Level')  
+> dev.off()
+null device 
+          1 
+> 
+> # Table of time to first solution
+> timeToSol = toSeconds(airway$Time_to_Solution)
+> Airway_Trained = timeToSol[grep(' (T|t)rained', airway$Subject)]
+> Airway_Untrained = timeToSol[grep('(U|u)ntrained', airway$Subject)]
+> 
+> addtorow = list()
+> addtorow$pos = list(0, 0)
+> addtorow$command = c("& \\multicolumn{2}{c}{Time to Solution} \\\\\n",
++                     "Group & Trained & Untrained \\\\\n")
+> 
+> air.Sol = cbind(Airway_Trained, Airway_Untrained)
+> xtable(air.Sol, add.to.row = addtorow, include.colnames = TRUE)
+% latex table generated in R 3.2.3 by xtable 1.8-0 package
+% Fri Feb 12 17:56:39 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+ & Airway\_Trained & Airway\_Untrained \\ 
+  \hline
+1 & 11.00 & 480.00 \\ 
+  2 & 38.00 & 480.00 \\ 
+  3 & 18.00 & 160.00 \\ 
+  4 & 15.00 & 480.00 \\ 
+   \hline
+\end{tabular}
+\end{table}
+> 
+> # XY Plot
+> level = c('nurse', 'nurse', 'trained', 'untrained', 'trained', 'untrained', 'trained', 'untrained', 'trained', 'untrained', 'fire')
+> png('../Plots/Airway_Time.png')
+> xyplot(airway$Subject ~ timeToSol, groups = level,
++       key = list(corner = c(1, 1), cex=0.95, title = 'Training', text = list(unique(level)), points = list(pch = 1:4, col = 1:4)), pch = 1:4, col = 1:4,
++       main = 'Time to Solution', xlim = c(0,600),
++       ylab = 'Group', xlab = 'Time in Seconds')
+> dev.off()
+null device 
+          1 
+> 
+> # barplot
+> airwayTable = matrix(c(20.5, 32.6, 43, 423, 25, 81), nrow=2, ncol=3)
+> colnames(airwayTable) = c('Average \n(Trained)', 'Average \n(Untrained)', 'OFCA')
+> png('../Plots/Airway_Plot1.png')
+> mp = barplot(airwayTable, main='Compromised Airway Scenario (Matched Groups)', 
++         xlab='Time (sec)', legend=c('Time to 1st Action','Time to Solution'),
++         horiz=TRUE, col=c('white', 'grey'), xlim=c(0,500),
++         args.legend=list(x="bottomright"))
+> dev.off()
+null device 
+          1 
+> 
+> airwayTable = matrix(c(21, 33, 54, 423), nrow=2, ncol=2)
+> colnames(airwayTable) = c('Average \n(Trained) All', 'Average \n(Untrained) All')
+> png('../Plots/Airway_Plot2.png')
+> mp = barplot(airwayTable, main='Compromised Airway Scenario (All Groups)', 
++         xlab='Time (sec)', legend=c('Time to 1st Action','Time to Solution'),
++         horiz=TRUE, col=c('white', 'grey'), xlim=c(0,500),
++         args.legend=list(x="bottomright"))
+> dev.off()
+null device 
+          1 
+> 
+> 
+> 
+> 
+> # t-test for time to first solution
+> print(t.test(x=Trained, y=Untrained, alternative=c('less')))
+
+	Welch Two Sample t-test
+
+data:  Trained and Untrained
+t = -9.004, df = 3, p-value = 0.001446
+alternative hypothesis: true difference in means is less than 0
+95 percent confidence interval:
+     -Inf -204.416
+sample estimates:
+mean of x mean of y 
+   203.25    480.00 
+
+> 
+> print(t.test(x=airwayTrained, y=airwayUntrained, alternative=c('less')))
+
+	Welch Two Sample t-test
+
+data:  airwayTrained and airwayUntrained
+t = -4.7304, df = 3.0338, p-value = 0.008729
+alternative hypothesis: true difference in means is less than 0
+95 percent confidence interval:
+      -Inf -191.5561
+sample estimates:
+mean of x mean of y 
+     20.5     400.0 
+
+> 
+> quit()
+> proc.time()
+   user  system elapsed 
+  1.415   0.122   1.590 
